@@ -28,7 +28,7 @@ namespace ConsoleUI
         {
             ProductManager productManager = new ProductManager(new EfProductDal());
             var list = productManager.GetAll();
-            foreach (var product in list.GetProductDetails())
+            foreach (var product in productManager.GetProductDetails())
             {
                 Console.WriteLine(product.ProductName +" / "+ product.CategoryName);
             }
