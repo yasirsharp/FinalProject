@@ -16,7 +16,6 @@ namespace ConsoleUI
             /*IOC*/
             //CategoryTest();
         }
-
         private static void CategoryTest()
         {
             CategoryManager categoryManager = new CategoryManager(new EfCategoryDal());
