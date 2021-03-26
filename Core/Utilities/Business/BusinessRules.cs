@@ -7,7 +7,7 @@ namespace Core.Utilities.Business
 {
     public class BusinessRules
     {
-        public static IResullt Run(params IResullt[] logics)
+        public static IResult Run(params IResult[] logics)
         {
             foreach (var logic in logics)
             {

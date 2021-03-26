@@ -23,17 +23,18 @@ namespace Business.Concrete
     {
         IProductDal _productDal;
         ICategoryService _categoryService;
+
         public ProductManager(IProductDal productDal, ICategoryService categoryService)
         {
             _productDal = productDal;
             _categoryService = categoryService;
         }
 
-        [SecuredOperation("admin")]
+        [SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
-        public IResullt Add(Product product)
+        public IResult Add(Product product)
         {
-            IResullt result = BusinessRules.Run(CheckIfProductNameExists(product.ProductName), 
+            IResult result = BusinessRules.Run(CheckIfProductNameExists(product.ProductName), 
                 CheckIfProductCountOfCategoryCorrect(product.CategoryId), CheckIfCategoryLimitExceded());
 
             if (result != null)
@@ -79,26 +80,26 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(ProductValidator))]
-        public IResullt Update(Product product)
+        public IResult Update(Product product)
         {
             var result = _productDal.GetAll(p => p.CategoryId == product.CategoryId).Count;
-            if (result >= 10)
+            if (result >= 15)
             {
                 return new ErrorResult(Messages.ProductCountOfCategoryError);
             }
             throw new NotImplementedException();
         }
 
-        public IResullt CheckIfProductCountOfCategoryCorrect(int categoryId)
+        public IResult CheckIfProductCountOfCategoryCorrect(int categoryId)
         {
             var result = _productDal.GetAll(p => p.CategoryId == categoryId).Count;
-            if (result >= 10)
+            if (result >= 190)
             {
                 return new ErrorResult(Messages.ProductCountOfCategoryError);
             }
             return new SuccessResult();
         }
-        private IResullt CheckIfProductNameExists(string productName)
+        private IResult CheckIfProductNameExists(string productName)
         {
             var result = _productDal.GetAll(p => p.ProductName == productName).Any();
             if (result)
@@ -108,10 +109,10 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        private IResullt CheckIfCategoryLimitExceded()
+        private IResult CheckIfCategoryLimitExceded()
         {
             var result = _categoryService.GetAll();
-            if (result.Data.Count<15)
+            if (result.Data.Count>15)
             {
                 return new ErrorResult(Messages.CategoryLimitedExceded);
             }
